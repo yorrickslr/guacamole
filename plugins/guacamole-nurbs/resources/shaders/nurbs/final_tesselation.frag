@@ -34,6 +34,7 @@ uniform samplerBuffer trim_curvelist;
 uniform samplerBuffer trim_curvedata;
 uniform samplerBuffer trim_pointdata;
 uniform samplerBuffer trim_preclassification;
+uniform bool trim_enabled;
 
 uniform mat4 gua_view_inverse_matrix;
 
@@ -74,6 +75,7 @@ void main()
   // retrieve patch information from ssbo
   vec4 nurbs_domain = retrieve_patch_domain(int(gIndex));
   int trim_index    = retrieve_trim_index(int(gIndex));
+  int trim_type     = retrieve_trim_type(int(gIndex));
 
   // transform bezier coordinates to knot span of according NURBS element
   vec2 domain_size  = vec2(nurbs_domain.z - nurbs_domain.x, nurbs_domain.w - nurbs_domain.y);
@@ -89,10 +91,10 @@ void main()
                                            trim_pointdata,
                                            trim_preclassification,
                                            uv_nurbs,
-                                           int(trim_index), 1, tmp, GPUCAST_TRIMMING_DOMAIN_ERROR_THRESHOLD, GPUCAST_TRIMMING_MAX_BISECTIONS);
+                                           int(trim_index), trim_type, tmp, GPUCAST_TRIMMING_DOMAIN_ERROR_THRESHOLD, GPUCAST_TRIMMING_MAX_BISECTIONS);
 
   // fully discard trimmed fragments
-  if ( trimmed ) {
+  if ( trimmed && trim_enabled ) {
       discard;
   }
 
@@ -101,6 +103,15 @@ void main()
   /////////////////////////////////////////////////////
   @material_input@
   @include "resources/shaders/common/gua_global_variable_assignment.glsl"
+
+  // correct normal to be front-facing
+  vec4 nworld  = vec4(gua_normal.xyz, 0.0);
+  vec4 nview   = transpose(inverse(gua_view_matrix * gua_model_matrix)) * vec4(gua_normal.xyz, 0.0);
+  vec4 cam2pos = gua_view_matrix * vec4(gua_world_position.xyz, 1.0);
+
+  float invert_normal = dot(normalize(nview.xyz), normalize(-cam2pos.xyz)) < 0.0 ? -1.0 : 1.0;
+  
+  gua_normal = invert_normal * normalize(nworld.xyz);
 
   @material_method_calls_frag@
 
