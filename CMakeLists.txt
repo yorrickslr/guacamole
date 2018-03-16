@@ -345,6 +345,16 @@ if (GUACAMOLE_EXAMPLES)
 endif (GUACAMOLE_EXAMPLES)
 
 ################################################################
+# Tutorial
+################################################################
+
+option (GUACAMOLE_TUTORIAL "Build tutorial." OFF)
+
+if (GUACAMOLE_TUTORIAL)
+  add_subdirectory(tutorial)
+endif (GUACAMOLE_TUTORIAL)
+
+################################################################
 # Summary
 ################################################################
 
