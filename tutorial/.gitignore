@@ -10,6 +10,10 @@ beginner/2_transformations/Debug
 beginner/2_transformations/Release
 beginner/2_transformations/example-2_transformations
 
-beginner/3_lights/Debug
-beginner/3_lights/Release
-beginner/3_lights/example-3_lights
+beginner/3_input/Debug
+beginner/3_input/Release
+beginner/3_input/example-3_input
+
+beginner/4_lights/Debug
+beginner/4_lights/Release
+beginner/4_lights/example-4_lights
