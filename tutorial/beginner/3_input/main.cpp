@@ -72,10 +72,13 @@ int main(int argc, char** argv) {
   auto transform = graph.add_node<gua::node::TransformNode>("/", "transform");
   // the model will be attached to the transform node
   auto teapot_geometry(loader.create_geometry_from_file(
-                          "sphere_geometry",
-                          "../data/objects/teapot.obj" )
+                          "teapot_geometry", "../data/objects/teapot.obj", 
+                          gua::TriMeshLoader::OPTIMIZE_GEOMETRY | gua::TriMeshLoader::NORMALIZE_POSITION |
+                          gua::TriMeshLoader::LOAD_MATERIALS | gua::TriMeshLoader::OPTIMIZE_MATERIALS |
+                          gua::TriMeshLoader::NORMALIZE_SCALE )
                       );
-  teapot_geometry->scale(0.15);
+  // teapot_geometry->scale(0.15);
+  teapot_geometry->translate(-0.6,0.0,0.0);
   graph.add_node("/transform", teapot_geometry);
 
 

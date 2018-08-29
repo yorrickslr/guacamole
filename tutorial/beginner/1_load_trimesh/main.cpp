@@ -47,11 +47,16 @@ int main(int argc, char** argv) {
   // which will be attached to the scenegraph
   auto transform = graph.add_node<gua::node::TransformNode>("/", "transform");
   // the model will be attached to the transform node
+  // the trimesh loader has several flags you can attach when loading geometry
+  // like normalizing and optimizing or, if a mtl-file is associated with the model,
+  // also loading the appropriate materials
   auto sphere_geometry(loader.create_geometry_from_file(
-                          "sphere_geometry",
-                          "../data/objects/sphere.obj" )
+                          "sphere_geometry", "../data/objects/sphere.obj", 
+                          gua::TriMeshLoader::OPTIMIZE_GEOMETRY | gua::TriMeshLoader::NORMALIZE_POSITION |
+                          gua::TriMeshLoader::LOAD_MATERIALS | gua::TriMeshLoader::OPTIMIZE_MATERIALS |
+                          gua::TriMeshLoader::NORMALIZE_SCALE )
                       );
-  sphere_geometry->scale(0.5);
+  // sphere_geometry->scale(0.15);
   
   graph.add_node("/transform", sphere_geometry);
 
