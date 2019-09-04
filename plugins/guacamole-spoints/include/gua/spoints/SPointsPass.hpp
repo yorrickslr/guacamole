@@ -23,6 +23,7 @@
 #define GUA_SPOINTS_PASS_HPP
 
 #include <gua/spoints/platform.hpp>
+#include <gua/renderer/Pipeline.hpp>
 #include <gua/renderer/PipelinePass.hpp>
 #include <gua/renderer/ShaderProgram.hpp>
 
@@ -33,18 +34,27 @@
 #include <memory>
 #include <unordered_map>
 
-namespace gua {
-
-class GUA_SPOINTS_DLL SPointsPassDescription : public PipelinePassDescription {
- public:
-  SPointsPassDescription();
-
-  PipelinePass make_pass(RenderContext const& ctx, SubstitutionMap&);
-
-  std::shared_ptr<PipelinePassDescription> make_copy() const override;
-  friend class Pipeline;
+namespace gua
+{
+class GUA_SPOINTS_DLL FeedbackCollectorResponsibilityDescription : public PipelineResponsibilityDescription
+{
+public:
+    explicit FeedbackCollectorResponsibilityDescription();
 };
 
-}
+class GUA_SPOINTS_DLL SPointsPassDescription : public PipelinePassDescription
+{
+  public:
+    SPointsPassDescription();
 
-#endif  // GUA_VIDEO3D_PASS_HPP
+    PipelinePass make_pass(RenderContext const& ctx, SubstitutionMap&);
+
+    std::shared_ptr<PipelinePassDescription> make_copy() const override;
+    friend class Pipeline;
+
+  private:
+};
+
+} // namespace gua
+
+#endif // GUA_SPOINTS_PASS_HPP

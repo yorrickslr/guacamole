@@ -38,7 +38,7 @@ void main() {
     } else if ( fragment_position.x < 4*debug_window_width) {
         // output position
       gua_out_color = gua_get_position(texcoord);
-    } else if ( fragment_position.x < 5*debug_window_width) {
+    } else if ( fragment_position.x < 6*debug_window_width) {
       unsigned int nlights = gua_sun_lights_num;
       int bitset_words = ((gua_lights_num - 1) >> 5) + 1;
 
