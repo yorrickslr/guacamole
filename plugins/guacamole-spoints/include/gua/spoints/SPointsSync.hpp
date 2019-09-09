@@ -18,23 +18,35 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.             *
  *                                                                            *
  ******************************************************************************/
-#ifndef GUA_INCLUDE_SPOINTS_HPP
-#define GUA_INCLUDE_SPOINTS_HPP
+
+#ifndef GUA_SPOINTS_SYNC_HPP
+#define GUA_SPOINTS_SYNC_HPP
+
+#include <gua/spoints/platform.hpp>
+
+#include <queue>
+
+#include <gua/utils.hpp>
+
+namespace gua
+{
+
+class GUA_SPOINTS_DLL SPointsSync
+{
+  public: 
+     SPointsSync();
+    ~SPointsSync() {};
 
 
-#include <gua/spoints/SPointsNode.hpp>
-#include <gua/spoints/SPointsPass.hpp>
-#include <gua/spoints/SPointsLoader.hpp>
-#include <gua/spoints/SPointsSync.hpp>
+    void set_sync_length(unsigned const& new_sync_length);
+    unsigned get_sync_length();
 
-#if defined(_MSC_VER)
-#if defined(GUA_SPOINTS_LIBRARY)
-#define GUA_SPOINTS_DLL __declspec(dllexport)
-#else
-#define GUA_SPOINTS_DLL __declspec(dllimport)
-#endif
-#else
-#define GUA_SPOINTS_DLL
-#endif // #if defined(_MSC_VER)
+  private:
+    
+    std::queue<scm::math::mat<double, 4u, 4u>> sync_queue;
+    unsigned sync_length;
+};
 
-#endif // GUA_INCLUDE_SPOINTS_HPP
+} // namespace gua
+
+#endif // GUA_SPOINTS_SYNC_HPP

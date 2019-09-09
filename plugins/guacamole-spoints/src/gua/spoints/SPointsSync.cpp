@@ -18,23 +18,34 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.             *
  *                                                                            *
  ******************************************************************************/
-#ifndef GUA_INCLUDE_SPOINTS_HPP
-#define GUA_INCLUDE_SPOINTS_HPP
+// class header
 
-
-#include <gua/spoints/SPointsNode.hpp>
-#include <gua/spoints/SPointsPass.hpp>
-#include <gua/spoints/SPointsLoader.hpp>
 #include <gua/spoints/SPointsSync.hpp>
 
-#if defined(_MSC_VER)
-#if defined(GUA_SPOINTS_LIBRARY)
-#define GUA_SPOINTS_DLL __declspec(dllexport)
-#else
-#define GUA_SPOINTS_DLL __declspec(dllimport)
-#endif
-#else
-#define GUA_SPOINTS_DLL
-#endif // #if defined(_MSC_VER)
+// guacamole headers
+#include <gua/platform.hpp>
+#include <gua/guacamole.hpp>
 
-#endif // GUA_INCLUDE_SPOINTS_HPP
+namespace gua
+{
+
+#warning "got here inside of gua namespace in cpp"
+
+////////////////////////////////////////////////////////////////////////////////
+SPointsSync::SPointsSync() : sync_length{0}
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void SPointsSync::set_sync_length(unsigned const& new_sync_length)
+{
+  sync_length = new_sync_length;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+unsigned SPointsSync::get_sync_length()
+{
+  return sync_length;
+}
+
+} // namespace gua
