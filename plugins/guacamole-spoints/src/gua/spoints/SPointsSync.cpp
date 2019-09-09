@@ -29,21 +29,45 @@
 namespace gua
 {
 
-#warning "got here inside of gua namespace in cpp"
-
 ////////////////////////////////////////////////////////////////////////////////
 SPointsSync::SPointsSync() : sync_length{0}
 {
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void SPointsSync::set_sync_length(unsigned const& new_sync_length)
+void SPointsSync::synchronize(scm::math::mat<double, 4u, 4u> &matrix)
+{
+  sync_queue.push(matrix);
+  matrix = sync_queue.front();
+  if(sync_queue.size() > sync_length) {
+    sync_queue.pop();
+  }
+  std::cerr << "sync_queue.size() = " << sync_queue.size() << std::endl;
+  std::cerr << "sync_queue.front() = " << sync_queue.front() << std::endl;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+scm::math::mat<double, 4u, 4u> SPointsSync::get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix)
+{
+  sync_queue.push(matrix);
+  if(sync_queue.size() > sync_length) {
+    sync_queue.pop();
+  }
+  // std::cerr << "sync_queue.size() = " << sync_queue.size() << std::endl;
+  // std::cerr << "sync_queue.front() = " << sync_queue.front() << std::endl;
+
+  return sync_queue.front();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void SPointsSync::set_sync_length(int new_sync_length)
 {
   sync_length = new_sync_length;
 }
 
 //////////////////////////////////////////////////////////////////////////////
-unsigned SPointsSync::get_sync_length()
+int SPointsSync::get_sync_length()
 {
   return sync_length;
 }

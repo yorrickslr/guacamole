@@ -28,6 +28,7 @@
 #include <gua/databases/GeometryDescription.hpp>
 #include <gua/spoints/SPointsResource.hpp>
 #include <gua/spoints/spoints_geometry/NetKinectArray.hpp>
+#include <gua/spoints/SPointsSync.hpp>
 
 // external headers
 #include <string>
@@ -91,6 +92,8 @@ class GUA_SPOINTS_DLL SPointsNode : public GeometryNode
     void set_is_server_resource(bool is_server_resource);
     bool get_is_server_resource() const;
 
+    SPointsSync sync;
+
   protected:
     std::shared_ptr<Node> copy() const override;
 
@@ -104,6 +107,7 @@ class GUA_SPOINTS_DLL SPointsNode : public GeometryNode
     bool material_changed_;
 
     bool is_server_resource_;
+
 };
 
 } // namespace node

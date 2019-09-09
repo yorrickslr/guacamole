@@ -27,6 +27,7 @@
 #include <queue>
 
 #include <gua/utils.hpp>
+#include <gua/math/math.hpp>
 
 namespace gua
 {
@@ -38,13 +39,14 @@ class GUA_SPOINTS_DLL SPointsSync
     ~SPointsSync() {};
 
 
-    void set_sync_length(unsigned const& new_sync_length);
-    unsigned get_sync_length();
+    void set_sync_length(int new_sync_length);
+    int get_sync_length();
+    void synchronize(scm::math::mat<double, 4u, 4u> &new_matrix);
+    scm::math::mat<double, 4u, 4u> get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix);
 
   private:
-    
     std::queue<scm::math::mat<double, 4u, 4u>> sync_queue;
-    unsigned sync_length;
+    int sync_length;
 };
 
 } // namespace gua
