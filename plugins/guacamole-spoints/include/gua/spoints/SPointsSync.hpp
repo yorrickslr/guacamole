@@ -26,27 +26,31 @@
 
 #include <queue>
 
-#include <gua/utils.hpp>
 #include <gua/math/math.hpp>
+#include <gua/utils.hpp>
+
+#include <fstream>
+#include <iostream>
 
 namespace gua
 {
-
 class GUA_SPOINTS_DLL SPointsSync
 {
-  public: 
-     SPointsSync();
-    ~SPointsSync() {};
-
+  public:
+    SPointsSync();
+    ~SPointsSync(){};
 
     void set_sync_length(int new_sync_length);
     int get_sync_length();
-    void synchronize(scm::math::mat<double, 4u, 4u> &new_matrix);
+    void synchronize(scm::math::mat<double, 4u, 4u>& new_matrix);
     scm::math::mat<double, 4u, 4u> get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix);
 
+	unsigned long id = (unsigned long) this;
+
   private:
-    std::queue<scm::math::mat<double, 4u, 4u>> sync_queue;
+    std::queue<scm::math::mat<double, 4u, 4u>>* sync_queue = new std::queue<scm::math::mat<double, 4u, 4u>>();
     int sync_length;
+    // std::ofstream* file = new std::ofstream();
 };
 
 } // namespace gua

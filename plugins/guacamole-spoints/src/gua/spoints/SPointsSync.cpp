@@ -23,53 +23,47 @@
 #include <gua/spoints/SPointsSync.hpp>
 
 // guacamole headers
-#include <gua/platform.hpp>
 #include <gua/guacamole.hpp>
+#include <gua/platform.hpp>
 
 namespace gua
 {
-
 ////////////////////////////////////////////////////////////////////////////////
-SPointsSync::SPointsSync() : sync_length{0}
-{
-
+SPointsSync::SPointsSync() : sync_length{1000} {
+	// file->open("C:/Users/HMDEyes/SPointsSync.log");
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void SPointsSync::synchronize(scm::math::mat<double, 4u, 4u> &matrix)
+void SPointsSync::synchronize(scm::math::mat<double, 4u, 4u>& matrix)
 {
-  sync_queue.push(matrix);
-  matrix = sync_queue.front();
-  if(sync_queue.size() > sync_length) {
-    sync_queue.pop();
-  }
-  std::cerr << "sync_queue.size() = " << sync_queue.size() << std::endl;
-  std::cerr << "sync_queue.front() = " << sync_queue.front() << std::endl;
+    return;
+    sync_queue->push(matrix);
+    matrix = sync_queue->front();
+    if(sync_queue->size() > sync_length)
+    {
+        sync_queue->pop();
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 scm::math::mat<double, 4u, 4u> SPointsSync::get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix)
 {
-  sync_queue.push(matrix);
-  if(sync_queue.size() > sync_length) {
-    sync_queue.pop();
-  }
-  // std::cerr << "sync_queue.size() = " << sync_queue.size() << std::endl;
-  // std::cerr << "sync_queue.front() = " << sync_queue.front() << std::endl;
+    // *file << "sync lenght is " << sync_length << std::endl;
+	// *file << "pushing matrix to queue:" << std::endl;
+    // *file << matrix << std::endl;
+    sync_queue->push(matrix);
+    if(sync_queue->size() > sync_length)
+    {
+        sync_queue->pop();
+    }
 
-  return sync_queue.front();
+    return sync_queue->front();
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void SPointsSync::set_sync_length(int new_sync_length)
-{
-  sync_length = new_sync_length;
-}
+void SPointsSync::set_sync_length(int new_sync_length) { sync_length = new_sync_length; }
 
 //////////////////////////////////////////////////////////////////////////////
-int SPointsSync::get_sync_length()
-{
-  return sync_length;
-}
+int SPointsSync::get_sync_length() { return sync_length; }
 
 } // namespace gua

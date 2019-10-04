@@ -399,12 +399,8 @@ void SPointsRenderer::render(Pipeline& pipe, PipelinePassDescription const& desc
                     auto const node_world_transform = spoints_node->get_latest_cached_world_transform(ctx.render_window);
 
                     // sync view to current camera position
-
-                    // std::cout << "scene.rendering_frustum.get_view() = " << std::endl;
-                    // std::cout << scene.rendering_frustum.get_view() << std::endl;
-                    std::cout << "sync length is " << spoints_node->sync.get_sync_length() << std::endl;
-
-                    auto model_view_mat = spoints_node->sync.get_synchronized(scene.rendering_frustum.get_view()) * node_world_transform;
+					auto sync_mat = spoints_node->sync.get_synchronized(scene.rendering_frustum.get_camera_transform()) * scm::math::inverse(scene.rendering_frustum.get_camera_transform());
+                    auto model_view_mat = scene.rendering_frustum.get_view() * sync_mat * node_world_transform;
 
                     int rendering_mode = pipe.current_viewstate().shadow_mode ? (spoints_node->get_shadow_mode() == ShadowMode::HIGH_QUALITY ? 2 : 1) : 0;
 
