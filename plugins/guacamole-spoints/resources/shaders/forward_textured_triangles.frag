@@ -44,7 +44,11 @@ void main() {
   gua_emissivity = 1.0;
   gua_alpha      = 1.0;
   //gua_flags_passthrough = false;//(gua_emissivity > 0.99999);
-
+  
+  if(pass_uvs.x < 0.0 || pass_uvs.y < 0.0 || pass_uvs.x > 0.5 || pass_uvs.y > 0.5){
+    discard;
+  }
+  
   gua_color = texture(color_texture_atlas, pass_uvs).rgb;
   //gua_color = vec3(pass_uvs, 1.0);
 
