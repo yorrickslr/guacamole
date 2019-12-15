@@ -29,41 +29,61 @@
 namespace gua
 {
 ////////////////////////////////////////////////////////////////////////////////
-SPointsSync::SPointsSync() : sync_length{1000} {
-	// file->open("C:/Users/HMDEyes/SPointsSync.log");
-}
-
-//////////////////////////////////////////////////////////////////////////////
-void SPointsSync::synchronize(scm::math::mat<double, 4u, 4u>& matrix)
+SPointsSync::SPointsSync() : sync_length_{1}
 {
-    return;
-    sync_queue->push(matrix);
-    matrix = sync_queue->front();
-    if(sync_queue->size() > sync_length)
-    {
-        sync_queue->pop();
-    }
+    // file->open("C:/Users/HMDEyes/SPointsSync.log");
 }
 
 //////////////////////////////////////////////////////////////////////////////
-scm::math::mat<double, 4u, 4u> SPointsSync::get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix)
+scm::math::mat<double, 4u, 4u> SPointsSync::get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix, bool is_left)
 {
     // *file << "sync lenght is " << sync_length << std::endl;
-	// *file << "pushing matrix to queue:" << std::endl;
+    // *file << "pushing matrix to queue:" << std::endl;
     // *file << matrix << std::endl;
-    sync_queue->push(matrix);
-    if(sync_queue->size() > sync_length)
+    if(sync_length_ == 0)
     {
-        sync_queue->pop();
+        return matrix;
     }
+    if(is_left)
+    {
+        sync_queue_l_->push(matrix);
+        if(sync_queue_l_->size() > sync_length_)
+        {
+            sync_queue_l_->pop();
+        }
 
-    return sync_queue->front();
+        return sync_queue_l_->front();
+    }
+    else
+    {
+        sync_queue_r_->push(matrix);
+        if(sync_queue_r_->size() > sync_length_)
+        {
+            sync_queue_r_->pop();
+        }
+
+        return sync_queue_r_->front();
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void SPointsSync::set_sync_length(int new_sync_length) { sync_length = new_sync_length; }
+scm::math::mat<double, 4u, 4u> SPointsSync::get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix) { return get_synchronized(matrix, true); }
 
 //////////////////////////////////////////////////////////////////////////////
-int SPointsSync::get_sync_length() { return sync_length; }
+void SPointsSync::set_sync_length(int new_sync_length)
+{
+    sync_length_ = new_sync_length;
+    while(sync_length_ < sync_queue_l_->size())
+    {
+        sync_queue_l_->pop();
+    }
+    while(sync_length_ < sync_queue_r_->size())
+    {
+        sync_queue_r_->pop();
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+int SPointsSync::get_sync_length() { return sync_length_; }
 
 } // namespace gua

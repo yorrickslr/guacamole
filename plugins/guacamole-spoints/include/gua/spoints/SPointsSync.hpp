@@ -24,6 +24,7 @@
 
 #include <gua/spoints/platform.hpp>
 
+#include <memory>
 #include <queue>
 
 #include <gua/math/math.hpp>
@@ -42,15 +43,16 @@ class GUA_SPOINTS_DLL SPointsSync
 
     void set_sync_length(int new_sync_length);
     int get_sync_length();
-    void synchronize(scm::math::mat<double, 4u, 4u>& new_matrix);
+    scm::math::mat<double, 4u, 4u> get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix, bool is_left);
     scm::math::mat<double, 4u, 4u> get_synchronized(scm::math::mat<double, 4u, 4u> const& matrix);
 
-	unsigned long id = (unsigned long) this;
+    // unsigned long id = (unsigned long)this;
+    // std::ofstream* file = new std::ofstream();
 
   private:
-    std::queue<scm::math::mat<double, 4u, 4u>>* sync_queue = new std::queue<scm::math::mat<double, 4u, 4u>>();
-    int sync_length;
-    // std::ofstream* file = new std::ofstream();
+    std::shared_ptr<std::queue<scm::math::mat<double, 4u, 4u>>> sync_queue_l_ = std::make_shared<std::queue<scm::math::mat<double, 4u, 4u>>>(std::queue<scm::math::mat<double, 4u, 4u>>());
+    std::shared_ptr<std::queue<scm::math::mat<double, 4u, 4u>>> sync_queue_r_ = std::make_shared<std::queue<scm::math::mat<double, 4u, 4u>>>(std::queue<scm::math::mat<double, 4u, 4u>>());
+    int sync_length_;
 };
 
 } // namespace gua
